@@ -1,0 +1,10 @@
+Checks: >
+  *,
+  -llvmlibc-*,
+  -fuchsia-default-arguments-calls,
+  -fuchsia-default-arguments-declarations,
+  -fuchsia-overloaded-operator,
+  -fuchsia-trailing-return,
+  -modernize-use-trailing-return-type,
+  -altera-*,
+  -abseil-*
