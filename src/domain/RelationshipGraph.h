@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <chrono>
 #include <optional>
 #include <unordered_map>
 #include <vector>
@@ -48,6 +47,23 @@ public:
 
     // All relationships where to_id == personId.
     [[nodiscard]] std::vector<const Relationship *> incomingRelationships(PersonId personId) const;
+
+
+    // --- Persistence support ---
+
+    // Returns all persons as a flat list, for serialisation.
+    [[nodiscard]] std::vector<Person> allPeople() const;
+
+    // Returns all relationships as a flat list, for serialisation.
+    [[nodiscard]] std::vector<Relationship> allRelationships() const;
+
+    // Restores persons from deserialised data, preserving original IDs.
+    // Advances the ID counter past the highest restored ID.
+    void loadPeople(std::vector<Person> people);
+
+    // Restores relationships from deserialised data, preserving original IDs.
+    // Advances the ID counter past the highest restored ID.
+    void loadRelationships(std::vector<Relationship> relationships);
 
 private:
     std::unordered_map<PersonId, Person>             people_;
