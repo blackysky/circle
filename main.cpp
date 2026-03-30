@@ -11,7 +11,7 @@ int main() {
     alice.surname = "Schmidt";
     alice.gender = Gender::Female;
     alice.birth_year = BirthYear{2000}; // NOLINT(*-magic-numbers)
-    alice.aliases = {Alias{"Ally", true}, Alias{"Schmidti", false}};
+    alice.aliases = {Alias{.name = "Ally", .is_primary = true}, Alias{.name = "Schmidti", .is_primary = false}};
 
     Person bob;
     bob.first_name = "Bob";
@@ -37,7 +37,7 @@ int main() {
     rel.from_id = *alice_id;
     rel.to_id = *bob_id;
     rel.type = RelationshipType::Friend;
-    rel.strength = RelationshipStrength{RelationshipTier::Friend, 75}; // NOLINT(*-magic-numbers)
+    rel.strength = RelationshipStrength{.tier = RelationshipTier::Friend, .intensity = 75}; // NOLINT(*-magic-numbers)
     rel.is_active = true;
     rel.metadata.evidence_level = EvidenceLevel::Observed;
     rel.metadata.meeting_frequency = MeetingFrequency::Weekly;
@@ -76,9 +76,9 @@ int main() {
     if (const auto found = graph.findPerson(*alice_id)) {
         const Person *person = *found;
         std::cout << "\nAliases for " << person->first_name << ":\n";
-        for (const auto &alias: person->aliases) {
-            std::cout << "  " << alias.name
-                    << (alias.is_primary ? " (primary)" : "") << "\n";
+        for (const auto &[name, is_primary]: person->aliases) {
+            std::cout << "  " << name
+                    << (is_primary ? " (primary)" : "") << "\n";
         }
     }
 
