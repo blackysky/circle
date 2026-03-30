@@ -81,7 +81,7 @@ std::optional<RelationshipId> RelationshipGraph::addRelationship(Relationship re
     return relationship_id;
 }
 
-std::optional<const Relationship *> RelationshipGraph::findRelationship(RelationshipId relationshipId) const {
+std::optional<const Relationship *> RelationshipGraph::findRelationship(const RelationshipId relationshipId) const {
     const auto relationship_it = relationships_.find(relationshipId);
     if (relationship_it == relationships_.end()) {
         return std::nullopt;
