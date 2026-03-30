@@ -2,8 +2,6 @@
 // Created by Pavel Slabunov on 30.03.26.
 //
 
-#pragma once
-
 #include <optional>
 #include <queue>
 #include <unordered_map>
