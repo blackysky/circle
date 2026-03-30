@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 file(GLOB_RECURSE HEADERS src/*.h)
 
-add_executable(circle main.cpp ${HEADERS})
+add_executable(circle main.cpp ${HEADERS}
+        src/domain/RelationshipGraph.cpp)
 
 target_include_directories(circle PRIVATE src)
