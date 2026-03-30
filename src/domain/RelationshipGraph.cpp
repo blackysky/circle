@@ -4,6 +4,8 @@
 
 #include "RelationshipGraph.h"
 
+#include <ranges>
+
 // --- Person ---
 
 std::optional<PersonId> RelationshipGraph::addPerson(Person person) {
@@ -89,7 +91,7 @@ std::optional<const Relationship *> RelationshipGraph::findRelationship(const Re
     return &relationship_it->second;
 }
 
-bool RelationshipGraph::removeRelationship(RelationshipId relationshipId) {
+bool RelationshipGraph::removeRelationship(const RelationshipId relationshipId) {
     const auto relationship_it = relationships_.find(relationshipId);
     if (relationship_it == relationships_.end()) {
         return false;
@@ -135,4 +137,48 @@ std::vector<const Relationship *> RelationshipGraph::incomingRelationships(const
         result.push_back(&relationships_.at(rel_id));
     }
     return result;
+}
+
+
+// --- Persistence support ---
+
+std::vector<Person> RelationshipGraph::allPeople() const {
+    std::vector<Person> result;
+    result.reserve(people_.size());
+    for (const auto &person: people_ | std::views::values) {
+        result.push_back(person);
+    }
+    return result;
+}
+
+std::vector<Relationship> RelationshipGraph::allRelationships() const {
+    std::vector<Relationship> result;
+    result.reserve(relationships_.size());
+    for (const auto &relationship: relationships_ | std::views::values) {
+        result.push_back(relationship);
+    }
+    return result;
+}
+
+void RelationshipGraph::loadPeople(std::vector<Person> people) {
+    for (auto &person: people) {
+        const PersonId person_id = person.id;
+        outgoing_.emplace(person_id, std::vector<RelationshipId>{});
+        incoming_.emplace(person_id, std::vector<RelationshipId>{});
+        people_.emplace(person_id, std::move(person));
+        next_person_id_ = std::max(next_person_id_, person_id + 1);
+    }
+}
+
+void RelationshipGraph::loadRelationships(std::vector<Relationship> relationships) {
+    for (auto &relationship: relationships) {
+        const RelationshipId relationship_id = relationship.id;
+        const PersonId       from_id = relationship.from_id;
+        const PersonId       to_id = relationship.to_id;
+
+        outgoing_.at(from_id).push_back(relationship_id);
+        incoming_.at(to_id).push_back(relationship_id);
+        relationships_.emplace(relationship_id, std::move(relationship));
+        next_relationship_id_ = std::max(next_relationship_id_, relationship_id + 1);
+    }
 }
