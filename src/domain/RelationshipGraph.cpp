@@ -101,8 +101,8 @@ bool RelationshipGraph::removeRelationship(RelationshipId relationshipId) {
     auto &out = outgoing_.at(from_id);
     std::erase(out, relationshipId);
 
-    auto &inc = incoming_.at(from_id);
-    std::erase(inc, to_id);
+    auto &inc = incoming_.at(to_id);
+    std::erase(inc, relationshipId);
 
     relationships_.erase(relationship_it);
     return true;
