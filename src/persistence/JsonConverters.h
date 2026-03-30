@@ -35,6 +35,21 @@ inline std::chrono::system_clock::time_point tpFromJson(const nlohmann::json &j)
     return std::chrono::system_clock::from_time_t(j.get<int64_t>());
 }
 
+// --- Optional helper for custom types ---
+// nlohmann handles optional<string> and optional<enum> natively, but cannot
+// resolve our from_json through optional<CustomType>. This helper unpacks
+// the optional manually, bypassing the broken template path.
+
+template<typename T>
+std::optional<T> optionalFromJson(const nlohmann::json &j) {
+    if (j.is_null()) {
+        return std::nullopt;
+    }
+    T value;
+    from_json(j, value);
+    return value;
+}
+
 
 // --- Enums ---
 
@@ -270,9 +285,9 @@ inline void to_json(nlohmann::json &j, const Person &p) {
     j["surname"] = p.surname;
     j["aliases"] = p.aliases;
     j["gender"] = p.gender;
-    j["birth_year"] = p.birth_year;
+    j["birth_year"] = p.birth_year ? nlohmann::json(p.birth_year.value()) : nlohmann::json(nullptr);
     j["sexual_orientation"] = p.sexual_orientation;
-    j["religion"] = p.religion;
+    j["religion"] = p.religion ? nlohmann::json(p.religion.value()) : nlohmann::json(nullptr);
     j["addresses"] = p.addresses;
     j["notes"] = p.notes;
     j["created_at"] = tpToJson(p.created_at);
@@ -285,9 +300,9 @@ inline void from_json(const nlohmann::json &j, Person &p) {
     p.surname = j.at("surname").get<std::optional<std::string> >();
     p.aliases = j.at("aliases").get<std::vector<Alias> >();
     p.gender = j.at("gender").get<Gender>();
-    p.birth_year = j.at("birth_year").get<std::optional<BirthYear> >();
+    p.birth_year = optionalFromJson<BirthYear>(j.at("birth_year"));
     p.sexual_orientation = j.at("sexual_orientation").get<std::optional<SexualOrientation> >();
-    p.religion = j.at("religion").get<std::optional<Religion> >();
+    p.religion = optionalFromJson<Religion>(j.at("religion"));
     p.addresses = j.at("addresses").get<std::vector<TaggedAddress> >();
     p.notes = j.at("notes").get<std::optional<std::string> >();
     p.created_at = tpFromJson(j.at("created_at"));
