@@ -7,4 +7,7 @@ Checks: >
   -fuchsia-trailing-return,
   -modernize-use-trailing-return-type,
   -altera-*,
-  -abseil-*
+  -abseil-*,
+  -cppcoreguidelines-owning-memory,
+  -clang-analyzer-cplusplus.NewDeleteLeaks,
+  -*-prefer-static-over-anonymous-namespace

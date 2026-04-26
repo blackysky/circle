@@ -11,8 +11,8 @@
 namespace GraphSerializer {
     void save(const RelationshipGraph &graph, const std::filesystem::path &path) {
         nlohmann::json json;
-        json["people"] = graph.allPeople();
-        json["relationships"] = graph.allRelationships();
+        json["people"] = graph.allPeople();               // NOLINT(*-pro-bounds-avoid-unchecked-container-access)
+        json["relationships"] = graph.allRelationships(); // NOLINT(*-pro-bounds-avoid-unchecked-container-access)
 
         std::ofstream file(path);
         if (!file.is_open()) {

@@ -1,6 +1,7 @@
 {
   "name": "circle",
   "version": "1.0.0",
+  "builtin-baseline": "a7beca55cb90ee76f7958c1000d7d490a74ba620",
   "dependencies": [
     "nlohmann-json"
   ]
