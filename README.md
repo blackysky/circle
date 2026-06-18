@@ -11,11 +11,6 @@ The application is not yet complete and probably never will be.
 
 ## Why this project exists
 
-I wanted to learn modern C++ properly.
+I wanted to learn modern C++
 
-The usual approach of working through textbook examples or solving algorithmic problems seemed to me insufficient for
-developing a genuine intuitive understanding.  
-
-C++ idioms relating to ownership, lifetime, and compilation are best understood when solving real-world design problems.
-Choosing a field that genuinely interested me meant that every decision I made in the design process was motivated by a
-desire to solve a problem rather than to demonstrate a particular language feature.
+Choosing a field that genuinely interested me meant that every decision I made was driven either by a desire to actually implement it, using knowledge I already possessed or had acquired whilst learning about the issue, rather than to show off some specific feature of the language. 
